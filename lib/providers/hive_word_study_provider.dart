@@ -1,0 +1,158 @@
+import 'package:flutter/foundation.dart';
+import '../models/word_study_model.dart';
+import '../services/hive_service.dart';
+
+class HiveWordStudyProvider extends ChangeNotifier {
+  WordStudy? _currentStudy;
+  List<WordStudy> _studies = [];
+  bool _isLoading = false;
+  String? _error;
+
+  WordStudy? get currentStudy => _currentStudy;
+  List<WordStudy> get studies => _studies;
+  bool get isLoading => _isLoading;
+  String? get error => _error;
+
+  HiveWordStudyProvider() {
+    loadStudies();
+  }
+
+  Future<void> loadStudies() async {
+    _setLoading(true);
+    try {
+      _studies = HiveService.getAllWordStudies();
+      _error = null;
+    } catch (e) {
+      _error = 'Failed to load studies: $e';
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  void startNewStudy(
+    String passageReference, {
+    String? lessonName,
+    String? studySource,
+  }) {
+    final study = WordStudy(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      passageReference: passageReference,
+      selectedWord: '',
+      createdAt: DateTime.now(),
+      lessonName: lessonName,
+      studySource: studySource,
+    );
+
+    _currentStudy = study;
+    notifyListeners();
+  }
+
+  void resumeStudy(WordStudy study) {
+    _currentStudy = study;
+    notifyListeners();
+  }
+
+  // Auto-save methods that update the Hive object directly
+  void updateSelectedWord(String word) {
+    if (_currentStudy != null) {
+      _currentStudy!.selectedWord = word;
+      _currentStudy!.save(); // Auto-save to Hive
+      notifyListeners();
+    }
+  }
+
+  void updateNotes(String notes) {
+    if (_currentStudy != null) {
+      _currentStudy!.notes = notes;
+      _currentStudy!.save(); // Auto-save to Hive
+      notifyListeners();
+    }
+  }
+
+  void updateDefinition(String definition, String source) {
+    if (_currentStudy != null) {
+      _currentStudy!.chosenDefinition = definition;
+      _currentStudy!.definitionSource = source;
+      _currentStudy!.save(); // Auto-save to Hive
+      notifyListeners();
+    }
+  }
+
+  void updateBiblicalLanguage(String word, String definition) {
+    if (_currentStudy != null) {
+      _currentStudy!.biblicalLanguageWord = word;
+      _currentStudy!.biblicalLanguageDefinition = definition;
+      _currentStudy!.save(); // Auto-save to Hive
+      notifyListeners();
+    }
+  }
+
+  void updateCrossReferences(List<String> references) {
+    if (_currentStudy != null) {
+      _currentStudy!.crossReferences = references;
+      _currentStudy!.save(); // Auto-save to Hive
+      notifyListeners();
+    }
+  }
+
+  void updateRefinedDefinition(String definition) {
+    if (_currentStudy != null) {
+      _currentStudy!.refinedDefinition = definition;
+      _currentStudy!.save(); // Auto-save to Hive
+      notifyListeners();
+    }
+  }
+
+  Future<void> saveCurrentStudy() async {
+    if (_currentStudy != null) {
+      try {
+        await HiveService.saveWordStudy(_currentStudy!);
+        await loadStudies();
+        _error = null;
+      } catch (e) {
+        _error = 'Failed to save study: $e';
+      }
+    }
+  }
+
+  Future<void> deleteStudy(String id) async {
+    _setLoading(true);
+    try {
+      await HiveService.deleteWordStudy(id);
+      await loadStudies();
+      _error = null;
+    } catch (e) {
+      _error = 'Failed to delete study: $e';
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  void clearError() {
+    _error = null;
+    notifyListeners();
+  }
+
+  // Helper methods for step navigation
+  int getCurrentStep(WordStudy study) {
+    if (study.selectedWord.isEmpty) return 1;
+    if (study.chosenDefinition == null) return 2;
+    if (study.crossReferences == null || study.crossReferences!.isEmpty) {
+      return 3;
+    }
+    return 4; // Final notes step
+  }
+
+  bool isStudyCompleted(WordStudy study) {
+    return study.selectedWord.isNotEmpty &&
+        study.chosenDefinition != null &&
+        study.crossReferences != null &&
+        study.crossReferences!.isNotEmpty &&
+        (study.refinedDefinition != null || study.notes != null);
+  }
+
+  void _setLoading(bool loading) {
+    _isLoading = loading;
+    notifyListeners();
+  }
+}
