@@ -32,9 +32,21 @@ class PDFService {
               pw.SizedBox(height: 25),
               _buildDefinitionSection(wordStudy),
               pw.SizedBox(height: 25),
+              _buildContextThoughtsSection(wordStudy),
+              pw.SizedBox(height: 25),
+              _buildBiblicalLanguageSection(wordStudy),
+              pw.SizedBox(height: 25),
               _buildCrossReferencesSection(wordStudy),
               pw.SizedBox(height: 25),
+              _buildCrossReferencePassagesSection(wordStudy),
+              pw.SizedBox(height: 25),
+              _buildOutsideSourcesSection(wordStudy),
+              pw.SizedBox(height: 25),
               _buildNotesSection(wordStudy),
+              pw.SizedBox(height: 25),
+              _buildSummarySection(wordStudy),
+              pw.SizedBox(height: 25),
+              _buildPersonalResponseSection(wordStudy),
               pw.Spacer(),
               _buildFooter(wordStudy),
             ],
@@ -465,6 +477,359 @@ class PDFService {
           pw.Text(
             'Page 1',
             style: pw.TextStyle(fontSize: 10, color: PdfColors.grey500),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static pw.Widget _buildContextThoughtsSection(WordStudy wordStudy) {
+    if (wordStudy.contextThoughts == null) return pw.Container();
+
+    return pw.Container(
+      padding: const pw.EdgeInsets.all(16),
+      decoration: pw.BoxDecoration(
+        color: PdfColors.indigo50,
+        border: pw.Border.all(color: PdfColors.indigo200),
+        borderRadius: pw.BorderRadius.circular(8),
+      ),
+      child: pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Row(
+            children: [
+              pw.Container(width: 4, height: 20, color: PdfColors.indigo600),
+              pw.SizedBox(width: 12),
+              pw.Text(
+                'Context Thoughts',
+                style: pw.TextStyle(
+                  fontSize: 18,
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.indigo800,
+                ),
+              ),
+            ],
+          ),
+          pw.SizedBox(height: 12),
+          pw.Container(
+            padding: const pw.EdgeInsets.all(12),
+            decoration: pw.BoxDecoration(
+              color: PdfColors.white,
+              border: pw.Border.all(color: PdfColors.indigo300),
+              borderRadius: pw.BorderRadius.circular(6),
+            ),
+            child: pw.Text(
+              wordStudy.contextThoughts!,
+              style: pw.TextStyle(
+                fontSize: 14,
+                color: PdfColors.grey800,
+                height: 1.4,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static pw.Widget _buildBiblicalLanguageSection(WordStudy wordStudy) {
+    if (wordStudy.biblicalLanguageWord == null &&
+        wordStudy.biblicalLanguageDefinition == null) {
+      return pw.Container();
+    }
+
+    return pw.Container(
+      padding: const pw.EdgeInsets.all(16),
+      decoration: pw.BoxDecoration(
+        color: PdfColors.teal50,
+        border: pw.Border.all(color: PdfColors.teal200),
+        borderRadius: pw.BorderRadius.circular(8),
+      ),
+      child: pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Row(
+            children: [
+              pw.Container(width: 4, height: 20, color: PdfColors.teal600),
+              pw.SizedBox(width: 12),
+              pw.Text(
+                'Biblical Language',
+                style: pw.TextStyle(
+                  fontSize: 18,
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.teal800,
+                ),
+              ),
+            ],
+          ),
+          pw.SizedBox(height: 12),
+          pw.Container(
+            padding: const pw.EdgeInsets.all(12),
+            decoration: pw.BoxDecoration(
+              color: PdfColors.white,
+              border: pw.Border.all(color: PdfColors.teal300),
+              borderRadius: pw.BorderRadius.circular(6),
+            ),
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                if (wordStudy.biblicalLanguageWord != null) ...[
+                  pw.Text(
+                    'Original Word: ${wordStudy.biblicalLanguageWord}',
+                    style: pw.TextStyle(
+                      fontSize: 14,
+                      fontWeight: pw.FontWeight.bold,
+                      color: PdfColors.teal700,
+                    ),
+                  ),
+                  pw.SizedBox(height: 6),
+                ],
+                if (wordStudy.biblicalLanguageDefinition != null) ...[
+                  pw.Text(
+                    'Definition:',
+                    style: pw.TextStyle(
+                      fontSize: 12,
+                      fontWeight: pw.FontWeight.bold,
+                      color: PdfColors.teal600,
+                    ),
+                  ),
+                  pw.SizedBox(height: 4),
+                  pw.Text(
+                    wordStudy.biblicalLanguageDefinition!,
+                    style: pw.TextStyle(
+                      fontSize: 14,
+                      color: PdfColors.grey800,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static pw.Widget _buildCrossReferencePassagesSection(WordStudy wordStudy) {
+    if (wordStudy.crossReferencePassages == null ||
+        wordStudy.crossReferencePassages!.isEmpty) {
+      return pw.Container();
+    }
+
+    return pw.Container(
+      padding: const pw.EdgeInsets.all(16),
+      decoration: pw.BoxDecoration(
+        color: PdfColors.amber50,
+        border: pw.Border.all(color: PdfColors.amber200),
+        borderRadius: pw.BorderRadius.circular(8),
+      ),
+      child: pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Row(
+            children: [
+              pw.Container(width: 4, height: 20, color: PdfColors.amber600),
+              pw.SizedBox(width: 12),
+              pw.Text(
+                'Cross Reference Passages',
+                style: pw.TextStyle(
+                  fontSize: 18,
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.amber800,
+                ),
+              ),
+            ],
+          ),
+          pw.SizedBox(height: 12),
+          pw.Container(
+            padding: const pw.EdgeInsets.all(12),
+            decoration: pw.BoxDecoration(
+              color: PdfColors.white,
+              border: pw.Border.all(color: PdfColors.amber300),
+              borderRadius: pw.BorderRadius.circular(6),
+            ),
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: wordStudy.crossReferencePassages!
+                  .map(
+                    (passage) => pw.Padding(
+                      padding: const pw.EdgeInsets.only(bottom: 6),
+                      child: pw.Row(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Container(
+                            margin: const pw.EdgeInsets.only(top: 6, right: 8),
+                            width: 6,
+                            height: 6,
+                            decoration: const pw.BoxDecoration(
+                              color: PdfColors.amber500,
+                              shape: pw.BoxShape.circle,
+                            ),
+                          ),
+                          pw.Expanded(
+                            child: pw.Text(
+                              passage,
+                              style: pw.TextStyle(
+                                fontSize: 14,
+                                color: PdfColors.grey800,
+                                height: 1.3,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static pw.Widget _buildOutsideSourcesSection(WordStudy wordStudy) {
+    if (wordStudy.outsideSources == null) return pw.Container();
+
+    return pw.Container(
+      padding: const pw.EdgeInsets.all(16),
+      decoration: pw.BoxDecoration(
+        color: PdfColors.cyan50,
+        border: pw.Border.all(color: PdfColors.cyan200),
+        borderRadius: pw.BorderRadius.circular(8),
+      ),
+      child: pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Row(
+            children: [
+              pw.Container(width: 4, height: 20, color: PdfColors.cyan600),
+              pw.SizedBox(width: 12),
+              pw.Text(
+                'Outside Sources',
+                style: pw.TextStyle(
+                  fontSize: 18,
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.cyan800,
+                ),
+              ),
+            ],
+          ),
+          pw.SizedBox(height: 12),
+          pw.Container(
+            padding: const pw.EdgeInsets.all(12),
+            decoration: pw.BoxDecoration(
+              color: PdfColors.white,
+              border: pw.Border.all(color: PdfColors.cyan300),
+              borderRadius: pw.BorderRadius.circular(6),
+            ),
+            child: pw.Text(
+              wordStudy.outsideSources!,
+              style: pw.TextStyle(
+                fontSize: 14,
+                color: PdfColors.grey800,
+                height: 1.4,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static pw.Widget _buildSummarySection(WordStudy wordStudy) {
+    if (wordStudy.summary == null) return pw.Container();
+
+    return pw.Container(
+      padding: const pw.EdgeInsets.all(16),
+      decoration: pw.BoxDecoration(
+        color: PdfColors.pink50,
+        border: pw.Border.all(color: PdfColors.pink200),
+        borderRadius: pw.BorderRadius.circular(8),
+      ),
+      child: pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Row(
+            children: [
+              pw.Container(width: 4, height: 20, color: PdfColors.pink600),
+              pw.SizedBox(width: 12),
+              pw.Text(
+                'Summary',
+                style: pw.TextStyle(
+                  fontSize: 18,
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.pink800,
+                ),
+              ),
+            ],
+          ),
+          pw.SizedBox(height: 12),
+          pw.Container(
+            padding: const pw.EdgeInsets.all(12),
+            decoration: pw.BoxDecoration(
+              color: PdfColors.white,
+              border: pw.Border.all(color: PdfColors.pink300),
+              borderRadius: pw.BorderRadius.circular(6),
+            ),
+            child: pw.Text(
+              wordStudy.summary!,
+              style: pw.TextStyle(
+                fontSize: 14,
+                color: PdfColors.grey800,
+                height: 1.4,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static pw.Widget _buildPersonalResponseSection(WordStudy wordStudy) {
+    if (wordStudy.personalResponse == null) return pw.Container();
+
+    return pw.Container(
+      padding: const pw.EdgeInsets.all(16),
+      decoration: pw.BoxDecoration(
+        color: PdfColors.red50,
+        border: pw.Border.all(color: PdfColors.red200),
+        borderRadius: pw.BorderRadius.circular(8),
+      ),
+      child: pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Row(
+            children: [
+              pw.Container(width: 4, height: 20, color: PdfColors.red600),
+              pw.SizedBox(width: 12),
+              pw.Text(
+                'Personal Response',
+                style: pw.TextStyle(
+                  fontSize: 18,
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.red800,
+                ),
+              ),
+            ],
+          ),
+          pw.SizedBox(height: 12),
+          pw.Container(
+            padding: const pw.EdgeInsets.all(12),
+            decoration: pw.BoxDecoration(
+              color: PdfColors.white,
+              border: pw.Border.all(color: PdfColors.red300),
+              borderRadius: pw.BorderRadius.circular(6),
+            ),
+            child: pw.Text(
+              wordStudy.personalResponse!,
+              style: pw.TextStyle(
+                fontSize: 14,
+                color: PdfColors.grey800,
+                height: 1.4,
+              ),
+            ),
           ),
         ],
       ),

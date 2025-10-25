@@ -215,7 +215,7 @@ class _PassageReadingScreenState extends State<PassageReadingScreen> {
             padding: const EdgeInsets.all(AppConstants.padding),
             child: FlexibleStepProgressIndicator(
               currentStep: 1,
-              totalSteps: 5,
+              totalSteps: 6,
               isEditingCompleted: isCompleted,
               onStepTap: (step) =>
                   NavigationService.navigateToStep(context, step),

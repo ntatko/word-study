@@ -157,8 +157,10 @@ class HiveWordStudyProvider extends ChangeNotifier {
         await HiveService.saveWordStudy(_currentStudy!);
         await loadStudies();
         _error = null;
+        notifyListeners(); // Ensure UI is updated after save
       } catch (e) {
         _error = 'Failed to save study: $e';
+        notifyListeners();
       }
     }
   }
@@ -185,21 +187,35 @@ class HiveWordStudyProvider extends ChangeNotifier {
   int getCurrentStep(WordStudy study) {
     if (study.selectedWord.isEmpty) return 1;
     if (study.contextThoughts == null) return 2;
-    if (study.crossReferences == null || study.crossReferences!.isEmpty) {
-      return 3;
-    }
-    if (study.outsideSources == null) return 4;
-    return 5; // Final notes step
+    if (study.chosenDefinition == null) return 3;
+    if (study.crossReferences == null) return 4;
+    if (study.outsideSources == null) return 5;
+    return 6; // Final notes step
   }
 
   bool isStudyCompleted(WordStudy study) {
-    return study.selectedWord.isNotEmpty &&
-        study.contextThoughts != null &&
-        study.crossReferences != null &&
-        study.crossReferences!.isNotEmpty &&
-        study.outsideSources != null &&
-        study.summary != null &&
-        study.personalResponse != null;
+    final hasSelectedWord = study.selectedWord.isNotEmpty;
+    final hasContextThoughts = study.contextThoughts != null;
+    final hasCrossReferences =
+        study.crossReferences != null; // Cross references are optional
+    final hasOutsideSources = study.outsideSources != null;
+    final hasSummary = study.summary != null;
+    final hasPersonalResponse = study.personalResponse != null;
+
+    // Debug logging to help identify missing fields
+    if (!hasSelectedWord) print('DEBUG: Missing selectedWord');
+    if (!hasContextThoughts) print('DEBUG: Missing contextThoughts');
+    if (!hasCrossReferences) print('DEBUG: Missing crossReferences');
+    if (!hasOutsideSources) print('DEBUG: Missing outsideSources');
+    if (!hasSummary) print('DEBUG: Missing summary');
+    if (!hasPersonalResponse) print('DEBUG: Missing personalResponse');
+
+    return hasSelectedWord &&
+        hasContextThoughts &&
+        hasCrossReferences &&
+        hasOutsideSources &&
+        hasSummary &&
+        hasPersonalResponse;
   }
 
   void _setLoading(bool loading) {

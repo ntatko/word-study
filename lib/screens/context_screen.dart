@@ -4,7 +4,7 @@ import '../providers/hive_word_study_provider.dart';
 import '../widgets/flexible_step_progress_indicator.dart';
 import '../services/navigation_service.dart';
 import '../utils/constants.dart';
-import 'cross_references_screen.dart';
+import 'definition_selection_screen.dart';
 
 class ContextScreen extends StatefulWidget {
   const ContextScreen({super.key});
@@ -45,9 +45,11 @@ class _ContextScreenState extends State<ContextScreen> {
       _contextController.text.trim(),
     );
 
-    // Navigate to cross-references screen (Step 3)
+    // Navigate to definition selection screen (Step 3)
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const CrossReferencesScreen()),
+      MaterialPageRoute(
+        builder: (context) => const DefinitionSelectionScreen(),
+      ),
     );
   }
 
@@ -73,7 +75,7 @@ class _ContextScreenState extends State<ContextScreen> {
             padding: const EdgeInsets.all(AppConstants.padding),
             child: FlexibleStepProgressIndicator(
               currentStep: 2,
-              totalSteps: 5,
+              totalSteps: 6,
               isEditingCompleted: isCompleted,
               onStepTap: (step) =>
                   NavigationService.navigateToStep(context, step),

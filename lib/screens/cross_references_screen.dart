@@ -136,8 +136,8 @@ class _CrossReferencesScreenState extends State<CrossReferencesScreen> {
           Padding(
             padding: const EdgeInsets.all(AppConstants.padding),
             child: FlexibleStepProgressIndicator(
-              currentStep: 3,
-              totalSteps: 5,
+              currentStep: 4,
+              totalSteps: 6,
               isEditingCompleted: isCompleted,
               onStepTap: (step) =>
                   NavigationService.navigateToStep(context, step),

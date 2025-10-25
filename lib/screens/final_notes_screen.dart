@@ -85,8 +85,8 @@ class _FinalNotesScreenState extends State<FinalNotesScreen> {
           Padding(
             padding: const EdgeInsets.all(AppConstants.padding),
             child: FlexibleStepProgressIndicator(
-              currentStep: 5,
-              totalSteps: 5,
+              currentStep: 6,
+              totalSteps: 6,
               isEditingCompleted: isCompleted,
               onStepTap: (step) =>
                   NavigationService.navigateToStep(context, step),

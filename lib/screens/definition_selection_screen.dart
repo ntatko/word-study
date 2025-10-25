@@ -74,8 +74,8 @@ class _DefinitionSelectionScreenState extends State<DefinitionSelectionScreen> {
           Padding(
             padding: const EdgeInsets.all(AppConstants.padding),
             child: FlexibleStepProgressIndicator(
-              currentStep: 2,
-              totalSteps: 4,
+              currentStep: 3,
+              totalSteps: 6,
               isEditingCompleted: isCompleted,
               onStepTap: (step) =>
                   NavigationService.navigateToStep(context, step),
@@ -135,6 +135,10 @@ class _DefinitionSelectionScreenState extends State<DefinitionSelectionScreen> {
     List<Widget> cards = [];
     final wordStudy = context.read<HiveWordStudyProvider>().currentStudy;
 
+    // Add EPI (English-Persian Interlinear) predefined definitions first
+    cards.addAll(_buildEPIDefinitions(wordStudy?.selectedWord ?? 'Word'));
+
+    // Add API-fetched definitions
     for (final entry in _dictionaryEntries) {
       for (final sense in entry.senses) {
         cards.add(
@@ -149,6 +153,154 @@ class _DefinitionSelectionScreenState extends State<DefinitionSelectionScreen> {
     }
 
     return cards;
+  }
+
+  List<Widget> _buildEPIDefinitions(String word) {
+    // Common biblical word definitions from EPI dictionary
+    final epiDefinitions = {
+      'love': [
+        {
+          'definition':
+              'Agape: Selfless, sacrificial love that seeks the good of others, especially as demonstrated by God toward humanity.',
+          'source': 'EPI - Agape Love',
+          'examples': [
+            'John 3:16 - "For God so loved the world"',
+            '1 Corinthians 13:4-7 - Love is patient and kind',
+          ],
+        },
+        {
+          'definition':
+              'Phileo: Brotherly love, affection between friends and family members.',
+          'source': 'EPI - Phileo Love',
+          'examples': [
+            'John 11:3 - "Lord, the one you love is sick"',
+            'Romans 12:10 - "Be devoted to one another in love"',
+          ],
+        },
+        {
+          'definition':
+              'Eros: Romantic or passionate love, though rarely used in biblical context.',
+          'source': 'EPI - Eros Love',
+          'examples': [
+            'Song of Songs - Romantic love between husband and wife',
+          ],
+        },
+      ],
+      'faith': [
+        {
+          'definition':
+              'Pistis: Trust, confidence, and belief in God and His promises, especially regarding salvation.',
+          'source': 'EPI - Pistis Faith',
+          'examples': [
+            'Hebrews 11:1 - "Faith is confidence in what we hope for"',
+            'Romans 1:17 - "The righteous will live by faith"',
+          ],
+        },
+        {
+          'definition':
+              'Faith as the substance of things hoped for, the evidence of things not seen.',
+          'source': 'EPI - Faith Definition',
+          'examples': [
+            'Hebrews 11:6 - "Without faith it is impossible to please God"',
+          ],
+        },
+      ],
+      'grace': [
+        {
+          'definition':
+              'Charis: Unmerited favor, God\'s free gift of salvation and blessing that cannot be earned.',
+          'source': 'EPI - Charis Grace',
+          'examples': [
+            'Ephesians 2:8-9 - "For it is by grace you have been saved"',
+            'Romans 3:24 - "Justified freely by his grace"',
+          ],
+        },
+        {
+          'definition':
+              'Grace as God\'s empowering presence enabling believers to live according to His will.',
+          'source': 'EPI - Grace Power',
+          'examples': [
+            '2 Corinthians 12:9 - "My grace is sufficient for you"',
+            'Titus 2:11-12 - "Grace teaches us to say no to ungodliness"',
+          ],
+        },
+      ],
+      'peace': [
+        {
+          'definition':
+              'Eirene: Inner tranquility, harmony, and well-being that comes from reconciliation with God.',
+          'source': 'EPI - Eirene Peace',
+          'examples': [
+            'Romans 5:1 - "We have peace with God through our Lord Jesus Christ"',
+            'Philippians 4:7 - "Peace of God which transcends understanding"',
+          ],
+        },
+        {
+          'definition':
+              'Shalom: Complete wholeness, prosperity, and harmony in all relationships.',
+          'source': 'EPI - Shalom Peace',
+          'examples': [
+            'Numbers 6:24-26 - "The Lord bless you and keep you"',
+            'Isaiah 9:6 - "Prince of Peace"',
+          ],
+        },
+      ],
+      'hope': [
+        {
+          'definition':
+              'Elpis: Confident expectation of future good, especially regarding God\'s promises and eternal life.',
+          'source': 'EPI - Elpis Hope',
+          'examples': [
+            'Romans 15:13 - "May the God of hope fill you with joy and peace"',
+            '1 Peter 1:3 - "New birth into a living hope"',
+          ],
+        },
+        {
+          'definition':
+              'Hope as an anchor for the soul, firm and secure in God\'s faithfulness.',
+          'source': 'EPI - Hope Anchor',
+          'examples': [
+            'Hebrews 6:19 - "We have this hope as an anchor for the soul"',
+            'Lamentations 3:21-23 - "Great is your faithfulness"',
+          ],
+        },
+      ],
+      'joy': [
+        {
+          'definition':
+              'Chara: Deep, abiding gladness and delight that comes from relationship with God.',
+          'source': 'EPI - Chara Joy',
+          'examples': [
+            'Galatians 5:22 - "Fruit of the Spirit is joy"',
+            'Nehemiah 8:10 - "Joy of the Lord is your strength"',
+          ],
+        },
+        {
+          'definition':
+              'Joy that remains even in trials, rooted in God\'s presence and promises.',
+          'source': 'EPI - Joy in Trials',
+          'examples': [
+            'James 1:2 - "Consider it pure joy when you face trials"',
+            '1 Peter 1:8 - "Inexpressible and glorious joy"',
+          ],
+        },
+      ],
+    };
+
+    final wordLower = word.toLowerCase();
+    final definitions = epiDefinitions[wordLower] ?? [];
+
+    return definitions
+        .map(
+          (def) => _buildDefinitionCard(
+            definition: def['definition'] as String,
+            source: def['source'] as String,
+            examples: def['examples'] != null
+                ? List<String>.from(def['examples'] as List)
+                : null,
+          ),
+        )
+        .toList();
   }
 
   Widget _buildErrorWidget() {

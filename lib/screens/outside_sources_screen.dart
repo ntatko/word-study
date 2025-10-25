@@ -72,8 +72,8 @@ class _OutsideSourcesScreenState extends State<OutsideSourcesScreen> {
           Padding(
             padding: const EdgeInsets.all(AppConstants.padding),
             child: FlexibleStepProgressIndicator(
-              currentStep: 4,
-              totalSteps: 5,
+              currentStep: 5,
+              totalSteps: 6,
               isEditingCompleted: isCompleted,
               onStepTap: (step) =>
                   NavigationService.navigateToStep(context, step),
