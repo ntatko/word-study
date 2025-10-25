@@ -103,6 +103,54 @@ class HiveWordStudyProvider extends ChangeNotifier {
     }
   }
 
+  void updateContextThoughts(String thoughts) {
+    if (_currentStudy != null) {
+      _currentStudy!.contextThoughts = thoughts;
+      _currentStudy!.save(); // Auto-save to Hive
+      notifyListeners();
+    }
+  }
+
+  void updateCrossReferencePassages(List<String> passages) {
+    if (_currentStudy != null) {
+      _currentStudy!.crossReferencePassages = passages;
+      _currentStudy!.save(); // Auto-save to Hive
+      notifyListeners();
+    }
+  }
+
+  void updateCrossReferenceNotes(String notes) {
+    if (_currentStudy != null) {
+      _currentStudy!.crossReferenceNotes = notes;
+      _currentStudy!.save(); // Auto-save to Hive
+      notifyListeners();
+    }
+  }
+
+  void updateOutsideSources(String sources) {
+    if (_currentStudy != null) {
+      _currentStudy!.outsideSources = sources;
+      _currentStudy!.save(); // Auto-save to Hive
+      notifyListeners();
+    }
+  }
+
+  void updateSummary(String summary) {
+    if (_currentStudy != null) {
+      _currentStudy!.summary = summary;
+      _currentStudy!.save(); // Auto-save to Hive
+      notifyListeners();
+    }
+  }
+
+  void updatePersonalResponse(String response) {
+    if (_currentStudy != null) {
+      _currentStudy!.personalResponse = response;
+      _currentStudy!.save(); // Auto-save to Hive
+      notifyListeners();
+    }
+  }
+
   Future<void> saveCurrentStudy() async {
     if (_currentStudy != null) {
       try {
@@ -136,19 +184,22 @@ class HiveWordStudyProvider extends ChangeNotifier {
   // Helper methods for step navigation
   int getCurrentStep(WordStudy study) {
     if (study.selectedWord.isEmpty) return 1;
-    if (study.chosenDefinition == null) return 2;
+    if (study.contextThoughts == null) return 2;
     if (study.crossReferences == null || study.crossReferences!.isEmpty) {
       return 3;
     }
-    return 4; // Final notes step
+    if (study.outsideSources == null) return 4;
+    return 5; // Final notes step
   }
 
   bool isStudyCompleted(WordStudy study) {
     return study.selectedWord.isNotEmpty &&
-        study.chosenDefinition != null &&
+        study.contextThoughts != null &&
         study.crossReferences != null &&
         study.crossReferences!.isNotEmpty &&
-        (study.refinedDefinition != null || study.notes != null);
+        study.outsideSources != null &&
+        study.summary != null &&
+        study.personalResponse != null;
   }
 
   void _setLoading(bool loading) {

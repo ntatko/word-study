@@ -43,6 +43,24 @@ class WordStudy extends HiveObject {
   @HiveField(12)
   String? studySource;
 
+  @HiveField(13)
+  String? contextThoughts;
+
+  @HiveField(14)
+  List<String>? crossReferencePassages;
+
+  @HiveField(15)
+  String? crossReferenceNotes;
+
+  @HiveField(16)
+  String? outsideSources;
+
+  @HiveField(17)
+  String? summary;
+
+  @HiveField(18)
+  String? personalResponse;
+
   WordStudy({
     required this.id,
     required this.passageReference,
@@ -57,6 +75,12 @@ class WordStudy extends HiveObject {
     required this.createdAt,
     this.lessonName,
     this.studySource,
+    this.contextThoughts,
+    this.crossReferencePassages,
+    this.crossReferenceNotes,
+    this.outsideSources,
+    this.summary,
+    this.personalResponse,
   });
 
   WordStudy copyWith({
@@ -73,6 +97,12 @@ class WordStudy extends HiveObject {
     DateTime? createdAt,
     String? lessonName,
     String? studySource,
+    String? contextThoughts,
+    List<String>? crossReferencePassages,
+    String? crossReferenceNotes,
+    String? outsideSources,
+    String? summary,
+    String? personalResponse,
   }) {
     return WordStudy(
       id: id ?? this.id,
@@ -89,6 +119,13 @@ class WordStudy extends HiveObject {
       createdAt: createdAt ?? this.createdAt,
       lessonName: lessonName ?? this.lessonName,
       studySource: studySource ?? this.studySource,
+      contextThoughts: contextThoughts ?? this.contextThoughts,
+      crossReferencePassages:
+          crossReferencePassages ?? this.crossReferencePassages,
+      crossReferenceNotes: crossReferenceNotes ?? this.crossReferenceNotes,
+      outsideSources: outsideSources ?? this.outsideSources,
+      summary: summary ?? this.summary,
+      personalResponse: personalResponse ?? this.personalResponse,
     );
   }
 }

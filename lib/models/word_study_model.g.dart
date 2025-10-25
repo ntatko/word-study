@@ -30,13 +30,19 @@ class WordStudyAdapter extends TypeAdapter<WordStudy> {
       createdAt: fields[10] as DateTime,
       lessonName: fields[11] as String?,
       studySource: fields[12] as String?,
+      contextThoughts: fields[13] as String?,
+      crossReferencePassages: (fields[14] as List?)?.cast<String>(),
+      crossReferenceNotes: fields[15] as String?,
+      outsideSources: fields[16] as String?,
+      summary: fields[17] as String?,
+      personalResponse: fields[18] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, WordStudy obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(19)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -62,7 +68,19 @@ class WordStudyAdapter extends TypeAdapter<WordStudy> {
       ..writeByte(11)
       ..write(obj.lessonName)
       ..writeByte(12)
-      ..write(obj.studySource);
+      ..write(obj.studySource)
+      ..writeByte(13)
+      ..write(obj.contextThoughts)
+      ..writeByte(14)
+      ..write(obj.crossReferencePassages)
+      ..writeByte(15)
+      ..write(obj.crossReferenceNotes)
+      ..writeByte(16)
+      ..write(obj.outsideSources)
+      ..writeByte(17)
+      ..write(obj.summary)
+      ..writeByte(18)
+      ..write(obj.personalResponse);
   }
 
   @override

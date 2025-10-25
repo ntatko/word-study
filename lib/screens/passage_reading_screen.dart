@@ -6,7 +6,7 @@ import '../services/passages_api_service.dart';
 import '../utils/constants.dart';
 import '../widgets/flexible_step_progress_indicator.dart';
 import '../services/navigation_service.dart';
-import 'definition_selection_screen.dart';
+import 'context_screen.dart';
 
 class PassageReadingScreen extends StatefulWidget {
   const PassageReadingScreen({super.key});
@@ -66,8 +66,82 @@ class _PassageReadingScreenState extends State<PassageReadingScreen> {
     final backgroundColor = isDark ? '#1E1E1E' : '#FFFFFF';
     final textColor = isDark ? '#FFFFFF' : '#000000';
 
-    final css =
-        '''
+    final css = isDark
+        ? '''
+      /* Dark mode - ensure proper contrast */
+      body {
+        background-color: #1E1E1E !important;
+        color: #FFFFFF !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        line-height: 1.6 !important;
+        padding: 20px !important;
+      }
+      
+      /* Force all containers to have dark background */
+      div, section, article, main, .passage-content, .passage-text {
+        background-color: #1E1E1E !important;
+        color: #FFFFFF !important;
+      }
+      
+      /* Force all text elements to be white */
+      p, div, span, h1, h2, h3, h4, h5, h6, li, td, th {
+        color: #FFFFFF !important;
+        background-color: transparent !important;
+      }
+      
+      /* Bible passage content */
+      .passage-text {
+        font-size: 18px !important;
+        line-height: 1.8 !important;
+        color: #FFFFFF !important;
+        background-color: #1E1E1E !important;
+      }
+      
+      /* Force text color for Bible passage content */
+      .passage-content p,
+      .passage-content div,
+      .passage-content span,
+      .passage-text p,
+      .passage-text div,
+      .passage-text span {
+        color: #FFFFFF !important;
+        background-color: transparent !important;
+      }
+      
+      /* Hide chapter numbers */
+      .chapter-num {
+        display: none !important;
+      }
+      
+      /* Ensure proper contrast for links */
+      a {
+        color: #4A9EFF !important;
+        text-decoration: underline !important;
+        background-color: transparent !important;
+      }
+      
+      a:hover {
+        color: #6BB6FF !important;
+      }
+      
+      /* Override any existing styles with proper contrast */
+      * {
+        color: #FFFFFF !important;
+        background-color: #1E1E1E !important;
+      }
+      
+      /* Ensure text elements don't inherit background */
+      p, span, h1, h2, h3, h4, h5, h6, li, td, th {
+        background-color: transparent !important;
+      }
+      
+      /* Re-invert images to keep them normal */
+      img {
+        filter: none !important;
+      }
+    '''
+        : '''
+      /* Light mode - normal styling */
       body {
         background-color: $backgroundColor !important;
         color: $textColor !important;
@@ -75,10 +149,12 @@ class _PassageReadingScreenState extends State<PassageReadingScreen> {
         line-height: 1.6 !important;
         padding: 20px !important;
       }
+      
       .passage-text {
         font-size: 18px !important;
         line-height: 1.8 !important;
       }
+      
       .chapter-num {
         display: none !important;
       }
@@ -139,7 +215,7 @@ class _PassageReadingScreenState extends State<PassageReadingScreen> {
             padding: const EdgeInsets.all(AppConstants.padding),
             child: FlexibleStepProgressIndicator(
               currentStep: 1,
-              totalSteps: 4,
+              totalSteps: 5,
               isEditingCompleted: isCompleted,
               onStepTap: (step) =>
                   NavigationService.navigateToStep(context, step),
@@ -163,6 +239,7 @@ class _PassageReadingScreenState extends State<PassageReadingScreen> {
               ),
             ),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: _wordController,
@@ -187,7 +264,7 @@ class _PassageReadingScreenState extends State<PassageReadingScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: _canProceed ? _proceedToNextStep : null,
-                    child: const Text('Next: Definition'),
+                    child: const Text('Next: Context'),
                   ),
                 ),
               ],
@@ -198,27 +275,26 @@ class _PassageReadingScreenState extends State<PassageReadingScreen> {
     );
   }
 
-  void _proceedToNextStep() {
+  void _proceedToNextStep() async {
     if (_wordController.text.trim().isEmpty) return;
 
+    final provider = context.read<HiveWordStudyProvider>();
+
+    // Save the current study to Hive first if it hasn't been saved yet
+    await provider.saveCurrentStudy();
+
     // Update the current study with the selected word and notes
-    context.read<HiveWordStudyProvider>().updateSelectedWord(
-      _wordController.text.trim(),
-    );
+    provider.updateSelectedWord(_wordController.text.trim());
     if (_notesController.text.trim().isNotEmpty) {
-      context.read<HiveWordStudyProvider>().updateNotes(
-        _notesController.text.trim(),
-      );
+      provider.updateNotes(_notesController.text.trim());
     }
 
     // Refresh the studies list to show the new study
-    context.read<HiveWordStudyProvider>().loadStudies();
+    provider.loadStudies();
 
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const DefinitionSelectionScreen(),
-      ),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => const ContextScreen()));
   }
 
   @override

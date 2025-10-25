@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Main logo design based on your SVG -->
+    <!-- Background circle -->
+    <path
+        android:fillColor="#333f48"
+        android:pathData="M54,54m-50,0a50,50 0,1 1,100 0a50,50 0,1 1,-100 0" />
+
+    <!-- Text elements - simplified representation of your logo text -->
+    <path
+        android:fillColor="#fcaf17"
+        android:pathData="M25,35 L25,75 L20,75 L20,35 Z M30,35 L30,75 L25,75 L25,35 Z M35,35 L35,75 L30,75 L30,35 Z M40,35 L40,75 L35,75 L35,35 Z M45,35 L45,75 L40,75 L40,35 Z M50,35 L50,75 L45,75 L45,35 Z M55,35 L55,75 L50,75 L50,35 Z M60,35 L60,75 L55,75 L55,35 Z M65,35 L65,75 L60,75 L60,35 Z M70,35 L70,75 L65,75 L65,35 Z M75,35 L75,75 L70,75 L70,35 Z M80,35 L80,75 L75,75 L75,35 Z" />
+
+    <!-- Accent element -->
+    <path
+        android:fillColor="#49c5b1"
+        android:pathData="M85,50 L85,65 L80,65 L80,50 Z" />
+
+</vector>

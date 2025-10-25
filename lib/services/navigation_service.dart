@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/hive_word_study_provider.dart';
 import '../screens/passage_reading_screen.dart';
-import '../screens/definition_selection_screen.dart';
+import '../screens/context_screen.dart';
 import '../screens/cross_references_screen.dart';
+import '../screens/outside_sources_screen.dart';
 import '../screens/final_notes_screen.dart';
 
 class NavigationService {
@@ -20,12 +21,15 @@ class NavigationService {
         targetScreen = const PassageReadingScreen();
         break;
       case 2:
-        targetScreen = const DefinitionSelectionScreen();
+        targetScreen = const ContextScreen();
         break;
       case 3:
         targetScreen = const CrossReferencesScreen();
         break;
       case 4:
+        targetScreen = const OutsideSourcesScreen();
+        break;
+      case 5:
         targetScreen = const FinalNotesScreen();
         break;
       default:
@@ -47,7 +51,7 @@ class NavigationService {
     final currentStep = provider.getCurrentStep(currentStudy);
     final nextStep = currentStep + 1;
 
-    if (nextStep <= 4) {
+    if (nextStep <= 5) {
       navigateToStep(context, nextStep);
     }
   }

@@ -5,7 +5,7 @@ import '../providers/hive_word_study_provider.dart';
 import '../utils/constants.dart';
 import '../widgets/flexible_step_progress_indicator.dart';
 import '../services/navigation_service.dart';
-import 'final_notes_screen.dart';
+import 'outside_sources_screen.dart';
 
 class CrossReferencesScreen extends StatefulWidget {
   const CrossReferencesScreen({super.key});
@@ -137,7 +137,7 @@ class _CrossReferencesScreenState extends State<CrossReferencesScreen> {
             padding: const EdgeInsets.all(AppConstants.padding),
             child: FlexibleStepProgressIndicator(
               currentStep: 3,
-              totalSteps: 4,
+              totalSteps: 5,
               isEditingCompleted: isCompleted,
               onStepTap: (step) =>
                   NavigationService.navigateToStep(context, step),
@@ -296,9 +296,9 @@ class _CrossReferencesScreenState extends State<CrossReferencesScreen> {
       _selectedReferences.toList(),
     );
 
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (context) => const FinalNotesScreen()));
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const OutsideSourcesScreen()),
+    );
   }
 
   @override

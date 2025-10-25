@@ -1,4 +1,4 @@
-package com.example.word_study
+package com.thirteenone.word_study
 
 import io.flutter.embedding.android.FlutterActivity
 

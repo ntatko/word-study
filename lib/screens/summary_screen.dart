@@ -47,8 +47,8 @@ class SummaryScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(AppConstants.padding),
               child: FlexibleStepProgressIndicator(
-                currentStep: 4,
-                totalSteps: 4,
+                currentStep: 5,
+                totalSteps: 5,
                 isEditingCompleted: false, // Summary screen is read-only
               ),
             ),
